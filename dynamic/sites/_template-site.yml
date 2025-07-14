@@ -1,0 +1,22 @@
+# Template thêm site mới cho Traefik
+http:
+  routers:
+    <router_name>:
+      rule: "Host(`<domain>`)", ví dụ: Host(`example.com`)
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - redirect-https@file
+        - secure-headers@file
+        - gzip@file
+        - rate-limit@file
+        - cache-static@file
+        # - whitelist@file  # Bật nếu cần giới hạn IP
+      service: <service_name>
+  services:
+    <service_name>:
+      loadBalancer:
+        servers:
+          - url: "http://<container_name>:80" 

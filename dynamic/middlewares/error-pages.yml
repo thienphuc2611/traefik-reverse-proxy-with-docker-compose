@@ -1,0 +1,9 @@
+http:
+  middlewares:
+    error-pages:
+      errors:
+        status:
+          - "404"
+          - "503"
+        service: error-service
+        query: "/{status}.html" 
