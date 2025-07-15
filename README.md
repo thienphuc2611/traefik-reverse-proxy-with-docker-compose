@@ -72,8 +72,10 @@ traefik/
 
 ## 1. Clone the Repository
 ```bash
-gh repo clone thienphuc2611/traefik-reverse-proxy-with-docker-compose
+git clone https://github.com/thienphuc2611/traefik-reverse-proxy-with-docker-compose.git
 cd traefik-reverse-proxy-with-docker-compose
+# (Optional) Remove .git folder for a clean source
+rm -rf .git
 ```
 
 ---
