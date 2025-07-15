@@ -1,21 +1,33 @@
-# Template thêm site mới cho Traefik
+# Template for adding a new site to Traefik
 http:
   routers:
     <router_name>:
-      rule: "Host(`<domain>`)", ví dụ: Host(`example.com`)
+      rule: "Host(`<domain>`)", e.g. Host(`example.com`)
       entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - redirect-https@file
+        - secure-headers@file
+        - gzip@file
+        - rate-limit@file
+        - cache-static@file
+        # - whitelist@file  # Enable if you want to restrict by IP
+      service: <service_name>
+
+    <router_name>_www:
+      rule: "Host(`www.<domain>`)", e.g. Host(`www.example.com`)
+      entryPoints:
+        - web
         - websecure
       tls:
         certResolver: letsencrypt
       middlewares:
         - redirect-www-to-root@file
         - redirect-https@file
-        - secure-headers@file
-        - gzip@file
-        - rate-limit@file
-        - cache-static@file
-        # - whitelist@file  # Bật nếu cần giới hạn IP
-      service: <service_name>
+      service: noop@internal
+
   services:
     <service_name>:
       loadBalancer:

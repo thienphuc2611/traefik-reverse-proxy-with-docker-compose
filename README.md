@@ -128,15 +128,21 @@ docker-compose up -d
    ```bash
    cp dynamic/sites/_template-site.yml dynamic/sites/example.com.yml
    ```
-2. **Edit `example.com.yml`:**
-   - Set `rule: "Host(`example.com`)"`
-   - Set the correct service name and container name
-   - Example:
+2. **Rename and edit `example.com.yml`:**
+   - Rename the file to your actual domain (e.g., `yourdomain.com.yml`).
+   - Open the file and replace the following placeholders:
+     - `<router_name>`: Set a router name, usually matching your domain (no spaces).
+     - `<domain>`: Replace with your real domain, e.g., `yourdomain.com`.
+     - `<service_name>`: Set a service name, usually matching your domain (no spaces).
+     - `<container_name>`: The name of your backend container (e.g., `your-app-nginx`).
+   - If you want to redirect www to non-www, keep the www router as in the template.
+   - If you don't use www, you can remove the www router.
+   - Example after editing:
      ```yaml
      http:
        routers:
-         example:
-           rule: "Host(`example.com`)"
+         yourdomain:
+           rule: "Host(`yourdomain.com`)"
            entryPoints:
              - websecure
            tls:
@@ -147,12 +153,25 @@ docker-compose up -d
              - gzip@file
              - rate-limit@file
              - cache-static@file
-           service: example
+           service: yourdomain
+
+         yourdomain_www:
+           rule: "Host(`www.yourdomain.com`)"
+           entryPoints:
+             - web
+             - websecure
+           tls:
+             certResolver: letsencrypt
+           middlewares:
+             - redirect-www-to-root@file
+             - redirect-https@file
+           service: noop@internal
+
        services:
-         example:
+         yourdomain:
            loadBalancer:
              servers:
-               - url: "http://your-app-container:80"
+               - url: "http://your-app-nginx:80"
      ```
 3. **Ensure your app container is on the same Docker network as Traefik** (see next step).
 

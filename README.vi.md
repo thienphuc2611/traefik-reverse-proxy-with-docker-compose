@@ -126,17 +126,23 @@ docker-compose up -d
 ## 7. Thêm site mới
 1. **Copy template:**
    ```bash
-   cp dynamic/sites/_template-site.yml dynamic/sites/example.com.yml
+   cp dynamic/sites/_template-site.yml dynamic/sites/tenmiencuaban.com.yml
    ```
-2. **Sửa file `example.com.yml`:**
-   - Đặt `rule: "Host(`example.com`)"`
-   - Đặt đúng tên service và container
-   - Ví dụ:
+2. **Đổi tên và chỉnh sửa file `tenmiencuaban.com.yml`:**
+   - Đổi tên file thành tên miền bạn muốn cấu hình (ví dụ: `tenmiencuaban.com.yml`).
+   - Mở file và thay các phần sau:
+     - `<router_name>`: Đặt tên router, nên đặt giống tên miền (không dấu cách).
+     - `<domain>`: Thay bằng tên miền thật, ví dụ: `tenmiencuaban.com`.
+     - `<service_name>`: Đặt tên service, nên đặt giống tên miền (không dấu cách).
+     - `<container_name>`: Tên container ứng dụng backend của bạn (ví dụ: `tenmiencuaban-nginx`).
+   - Nếu muốn redirect www về non-www, giữ nguyên router www như template.
+   - Nếu không dùng www, có thể xoá router www.
+   - Ví dụ sau khi chỉnh sửa:
      ```yaml
      http:
        routers:
-         example:
-           rule: "Host(`example.com`)"
+         tenmiencuaban:
+           rule: "Host(`tenmiencuaban.com`)"
            entryPoints:
              - websecure
            tls:
@@ -147,12 +153,25 @@ docker-compose up -d
              - gzip@file
              - rate-limit@file
              - cache-static@file
-           service: example
+           service: tenmiencuaban
+
+         tenmiencuaban_www:
+           rule: "Host(`www.tenmiencuaban.com`)"
+           entryPoints:
+             - web
+             - websecure
+           tls:
+             certResolver: letsencrypt
+           middlewares:
+             - redirect-www-to-root@file
+             - redirect-https@file
+           service: noop@internal
+
        services:
-         example:
+         tenmiencuaban:
            loadBalancer:
              servers:
-               - url: "http://your-app-container:80"
+               - url: "http://tenmiencuaban-nginx:80"
      ```
 3. **Đảm bảo container app nằm cùng network với Traefik** (xem bước tiếp theo).
 
