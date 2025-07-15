@@ -11,9 +11,6 @@ http:
         stsPreload: true
         stsSeconds: 63072000
         referrerPolicy: "strict-origin-when-cross-origin"
-        permissionsPolicy:
-          camera: "()"
-          geolocation: "()"
-          microphone: "()"
+        permissionsPolicy: "geolocation=(self), camera=(self), fullscreen=(self), microphone=()"
         customResponseHeaders:
           X-Content-Security-Policy: "default-src 'self'" 
