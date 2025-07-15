@@ -8,6 +8,7 @@ http:
       tls:
         certResolver: letsencrypt
       middlewares:
+        - redirect-www-to-root@file
         - redirect-https@file
         - secure-headers@file
         - gzip@file
