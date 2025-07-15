@@ -246,3 +246,16 @@ docker-compose restart traefik
 Happy reverse proxying! 
 
 --- 
+
+---
+
+## Q&A
+
+**Q: I have configured www to non-www redirection, but it still doesn't work. Why?**
+
+**A:**
+- Make sure you have created a DNS record (A or CNAME) for `www.yourdomain.com` pointing to your server's IP address.
+- If the DNS record for `www` does not exist or points elsewhere, requests to `www.yourdomain.com` will not reach your Traefik server, so the redirect cannot happen.
+- Go to your domain provider's DNS management page and add or update the `www` record to point to your server.
+
+--- 

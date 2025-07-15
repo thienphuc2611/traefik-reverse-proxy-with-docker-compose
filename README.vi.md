@@ -244,3 +244,22 @@ docker-compose restart traefik
 ---
 
 Chúc bạn reverse proxy thành công! 
+
+---
+
+## Hỏi & Đáp
+
+**Hỏi: Tôi đã cấu hình chuyển hướng www về non-www nhưng vẫn không hoạt động, tại sao?**
+
+**Trả lời:**
+- Hãy chắc chắn bạn đã tạo bản ghi DNS (A hoặc CNAME) cho `www.tenmiencuaban.com` trỏ về đúng IP server.
+- Nếu bản ghi DNS cho `www` chưa tồn tại hoặc trỏ sai, mọi truy cập vào `www.tenmiencuaban.com` sẽ không tới được Traefik để thực hiện chuyển hướng.
+- Vào trang quản lý DNS của nhà cung cấp domain và thêm/cập nhật bản ghi `www` trỏ về server.
+- **Nên tạo bản ghi nào?**
+  - Nếu server của bạn có IP tĩnh, hãy tạo bản ghi **A**:
+    - `www` → `IP_SERVER_CỦA_BẠN`
+  - Nếu muốn trỏ `www` về domain gốc, hãy tạo bản ghi **CNAME**:
+    - `www` → `tenmiencuaban.com`
+- Đợi vài phút để DNS cập nhật rồi thử lại.
+
+--- 
