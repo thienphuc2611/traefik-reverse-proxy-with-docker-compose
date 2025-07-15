@@ -14,16 +14,52 @@ This guide will help you deploy a production-ready Traefik v3 reverse proxy usin
 
 ---
 
+## Usage Scenarios
+
+You can deploy Traefik in two main ways, depending on your needs:
+
+### 1. Standard Reverse Proxy (for your apps)
+- Use `docker-compose.yml` to run Traefik as a reverse proxy for your applications.
+- Exposes ports 80, 443, and 443/udp for HTTP/HTTPS traffic.
+- Suitable for most use cases: your apps are accessible via your domain or server IP.
+- Start with:
+  ```bash
+  docker-compose up -d
+  ```
+
+### 2. Dashboard on a Separate Subdomain
+- Use `docker-compose.dashboard.yml` if you want the Traefik dashboard accessible via a dedicated subdomain (e.g., traefik.yourdomain.com).
+- Exposes ports 80, 443, and 443/udp (no need to expose 3080:8080).
+- Update the subdomain in `dynamic/sites/traefik-dashboard.yml` and point your DNS accordingly.
+- Start with:
+  ```bash
+  docker-compose -f docker-compose.dashboard.yml up -d
+  ```
+
+---
+
 ## Directory Structure
 
 ```
 traefik/
-├── docker-compose.yml         # Main Docker Compose file for Traefik
-├── traefik.yml                # Static Traefik configuration
-├── letsencrypt/               # Stores SSL certificates (acme.json)
-├── dynamic/                   # Dynamic configuration directory
-│   ├── middlewares/           # Common middlewares (gzip, rate-limit, etc.)
-│   └── sites/                 # Per-site configuration files
+├── docker-compose.yml               # Main Docker Compose file for Traefik (reverse proxy for apps)
+├── docker-compose.dashboard.yml     # Docker Compose file for Traefik dashboard on a subdomain
+├── traefik.yml                      # Static Traefik configuration
+├── letsencrypt/                     # Stores SSL certificates (acme.json)
+│   └── acme.json
+├── dynamic/                         # Dynamic configuration directory
+│   ├── middlewares/                 # Common middlewares (gzip, rate-limit, etc.)
+│   │   ├── cache-static.yml
+│   │   ├── error-pages.yml
+│   │   ├── gzip.yml
+│   │   ├── rate-limit.yml
+│   │   ├── redirect-https.yml
+│   │   ├── secure-headers.yml
+│   │   └── whitelist.yml
+│   └── sites/                       # Per-site configuration files
+│       ├── _template-site.yml
+│       └── traefik-dashboard.yml    # Router config for Traefik dashboard subdomain
+└── README.md                        # Project documentation
 ```
 
 ---
@@ -187,3 +223,5 @@ docker-compose restart traefik
 ---
 
 Happy reverse proxying! 
+
+--- 
