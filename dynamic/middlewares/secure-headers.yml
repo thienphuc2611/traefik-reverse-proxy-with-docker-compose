@@ -12,5 +12,15 @@ http:
         stsSeconds: 63072000
         referrerPolicy: "strict-origin-when-cross-origin"
         permissionsPolicy: "geolocation=(self), camera=(self), fullscreen=(self), microphone=()"
-        customResponseHeaders:
-          X-Content-Security-Policy: "default-src 'self'" 
+#        contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+          - DELETE
+        accessControlAllowHeaders: "*"
+        accessControlAllowOriginList:
+          - "*"
+        accessControlMaxAge: 100
+        addVaryHeader: true 
