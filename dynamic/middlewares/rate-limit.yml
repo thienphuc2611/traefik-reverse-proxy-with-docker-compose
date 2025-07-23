@@ -2,5 +2,5 @@ http:
   middlewares:
     rate-limit:
       rateLimit:
-        average: 10
-        burst: 100 
+        average: 100
+        burst: 1000

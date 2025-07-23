@@ -1,11 +1,11 @@
 http:
   routers:
     traefik-dashboard:
-      rule: "Host(`traefik.yourdomain.com`)"
       entryPoints:
         - websecure
+      rule: "Host(`dashboard.yourdomain.com`)"
       service: api@internal
+      middlewares:
+        - secure-headers
       tls:
         certResolver: letsencrypt
-      middlewares:
-        - secure-headers@file

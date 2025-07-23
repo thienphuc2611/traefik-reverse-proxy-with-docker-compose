@@ -2,7 +2,8 @@ http:
   middlewares:
     secure-headers:
       headers:
-        frameDeny: true
+        frameDeny: false
+        customFrameOptionsValue: "SAMEORIGIN"
         sslRedirect: true
         browserXssFilter: true
         contentTypeNosniff: true
